@@ -1,0 +1,35 @@
+name: Rust
+
+on:
+  pull_request:
+    branches: ["*"]
+  push:
+    branches: ["main", "dev"]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build for i686-pc-windows-msvc
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: i686-pc-windows-msvc
+          default: true
+      - uses: Swatinem/rust-cache@v1
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --target i686-pc-windows-msvc --release
+      - uses: actions/upload-artifact@v3
+        with:
+          name: rathole-i686-pc-windows-msvc
+          path: target/i686-pc-windows-msvc/release/rathole.exe
+          if-no-files-found: error
