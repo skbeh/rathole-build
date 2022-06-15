@@ -1,10 +1,7 @@
 name: Rust
 
 on:
-  pull_request:
-    branches: ["*"]
   push:
-    branches: ["main", "dev"]
   workflow_dispatch:
 
 env:
@@ -17,6 +14,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          repository: rapiz1/rathole
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
