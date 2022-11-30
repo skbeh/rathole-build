@@ -1,6 +1,8 @@
 name: Rust
 
 on:
+  schedule:
+    - cron: 0 0 * * *
   push:
   workflow_dispatch:
 
@@ -16,17 +18,16 @@ jobs:
       - uses: actions/checkout@v3
         with:
           repository: rapiz1/rathole
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          toolchain: stable
           target: i686-pc-windows-msvc
-          default: true
-      - uses: Swatinem/rust-cache@v1
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --target i686-pc-windows-msvc --release
+      - uses: Swatinem/rust-cache@v2
+      - name: Build
+        env:
+          SOURCE_DATE_EPOCH: 0
+          RUSTFLAGS: -C opt-level=3 -C target-cpu=sandybridge
+        run: |
+          cargo build --target i686-pc-windows-msvc --release --no-default-features --features client,tls
       - uses: actions/upload-artifact@v3
         with:
           name: rathole-i686-pc-windows-msvc
