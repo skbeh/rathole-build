@@ -25,7 +25,7 @@ jobs:
       - name: Build
         env:
           SOURCE_DATE_EPOCH: 0
-          RUSTFLAGS: -C opt-level=3 -C target-cpu=ivybridge
+          RUSTFLAGS: -C opt-level=3 -C target-cpu=westmere
         run: |
           cargo build --target i686-pc-windows-msvc --release --no-default-features --features client,tls
       - uses: actions/upload-artifact@v3
