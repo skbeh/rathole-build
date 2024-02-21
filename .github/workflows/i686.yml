@@ -15,7 +15,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           repository: rapiz1/rathole
       - uses: dtolnay/rust-toolchain@stable
@@ -27,8 +27,8 @@ jobs:
           SOURCE_DATE_EPOCH: 0
           RUSTFLAGS: -C opt-level=3 -C target-cpu=westmere
         run: |
-          cargo build --target i686-pc-windows-msvc --release --no-default-features --features client,tls
-      - uses: actions/upload-artifact@v3
+          cargo build --target i686-pc-windows-msvc --release --no-default-features --features client,rustls
+      - uses: actions/upload-artifact@v4
         with:
           name: rathole-i686-pc-windows-msvc
           path: target/i686-pc-windows-msvc/release/rathole.exe
