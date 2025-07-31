@@ -17,8 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: rapiz1/rathole
-      - uses: dtolnay/rust-toolchain@1.75
+          repository: rathole-org/rathole
+      - id: toolchain
+        uses: dtolnay/rust-toolchain@1.75
         with:
           target: i686-pc-windows-msvc
       - uses: Swatinem/rust-cache@v2
@@ -26,6 +27,7 @@ jobs:
         env:
           SOURCE_DATE_EPOCH: 0
           RUSTFLAGS: -C opt-level=3 -C target-cpu=westmere
+          RUSTUP_TOOLCHAIN: ${{ steps.toolchain.outputs.name }}
         run: |
           cargo build --target i686-pc-windows-msvc --release --no-default-features --features client,rustls
       - uses: actions/upload-artifact@v4
@@ -35,7 +37,7 @@ jobs:
           if-no-files-found: error
 
   workflow-keepalive:
-    if: github.event_name == 'schedule'
+    if: ${{ github.event_name == 'schedule' }}
     runs-on: ubuntu-latest
     permissions:
       actions: write
